@@ -2,15 +2,15 @@
 - name: Create and Launch a Job template for an I generated playbook
   hosts: all
   gather_facts: false
-  environment:
-    CONTROLLER_USERNAME: "{{ controller_username }}"
-    CONTROLLER_PASSWORD: "{{ controller_password }}"
-    CONTROLLER_HOST: "{{ controller_hostname }}"
-    CONTROLLER_VERIFY_SSL: "{{ controller_verify_ssl }}"
-    GATEWAY_USERNAME: "{{ controller_username }}"
-    GATEWAY_PASSWORD: "{{ controller_password }}"
-    GATEWAY_HOSTNAME: "{{ controller_hostname }}"
-    GATEWAY_VERIFY_SSL: "{{ controller_verify_ssl }}"
+  # environment:
+  #   CONTROLLER_USERNAME: "{{ controller_username }}"
+  #   CONTROLLER_PASSWORD: "{{ controller_password }}"
+  #   CONTROLLER_HOST: "{{ controller_hostname }}"
+  #   CONTROLLER_VERIFY_SSL: "{{ controller_verify_ssl }}"
+  #   GATEWAY_USERNAME: "{{ controller_username }}"
+  #   GATEWAY_PASSWORD: "{{ controller_password }}"
+  #   GATEWAY_HOSTNAME: "{{ controller_hostname }}"
+  #   GATEWAY_VERIFY_SSL: "{{ controller_verify_ssl }}"
   pre_tasks:
     - name: Authenticate with platform gateway
       ansible.platform.token:
