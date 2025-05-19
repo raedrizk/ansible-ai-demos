@@ -1,6 +1,6 @@
 ---
 - name: Prompt an AI model and get back an answer.
-  hosts: ollama
+  hosts: all
   gather_facts: false
   roles:
     - rsoliman.ai_demos.ai_prompt_model
