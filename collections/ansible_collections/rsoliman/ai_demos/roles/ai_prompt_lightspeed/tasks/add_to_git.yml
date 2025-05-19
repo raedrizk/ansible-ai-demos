@@ -1,4 +1,12 @@
 ---
+- name: config git
+  ansible.builtin.shell:
+    cmd: |
+      git config --global user.name "{{ git_name }}"
+      git config --global user.email "{{ git_email }}"
+      git config --global credential.helper store
+      echo "https://{{ git_username }}:{{ git_token }}@github.com" > ~/.git-credentials
+      
 - name: Checkout the repo
   ansible.builtin.git:
     repo: "{{ git_repo }}"
