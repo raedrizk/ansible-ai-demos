@@ -46,8 +46,6 @@
       become_enabled: true
       credentials:
         - "{{ input_credential | default('foxhound-lab-admin') }}"
-        - "{{ input_credential_2 | default(omit) }}"
-        - "{{ input_credential_3 | default(omit) }}"
       state: present
 
 
