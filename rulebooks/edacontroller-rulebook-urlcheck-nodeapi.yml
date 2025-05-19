@@ -19,7 +19,7 @@
             job_args:
               extra_vars:
                 snow_caller_choice: rsoliman
-                snow_cr_short_desc_choice: Services API is Down
+                snow_inc_short_desc_choice: Services API is Down
                 snow_inc_desc_choice: A routine check of the NodeJS Services API has failed.
                 snow_inc_urgency: high
                 snow_inc_impact: high
