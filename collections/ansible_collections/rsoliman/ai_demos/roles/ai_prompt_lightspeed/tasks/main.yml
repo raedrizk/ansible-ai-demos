@@ -1,14 +1,14 @@
 ---
 - name: Prompt Lightspeed and get back an answer
   ansible.builtin.uri:
-    url: "{{ lightspeed_endpoint }}"
+    url: "{{ ai_host }}:{{ ai_port }}/{{ ai_endpoint }}"
     method: POST
     headers:
       Content-Type: "application/json"
-      Authorization: "Bearer {{ lightspeed_token }}"
+      Authorization: "Bearer {{ ai_token }}"
     body_format: json
     body:
-      text: "{{ lightspeed_prompt }}"
+      text: "{{ ai_prompt }}"
   register: response
 
 - name: Print response
