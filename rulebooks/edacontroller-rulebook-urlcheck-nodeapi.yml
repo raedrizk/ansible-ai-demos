@@ -1,7 +1,6 @@
 ---
 - name: Check the health of Services API
   hosts: localhost
-  execution_strategy: parallel
   sources:
     - name: check web server
       ansible.eda.url_check:
