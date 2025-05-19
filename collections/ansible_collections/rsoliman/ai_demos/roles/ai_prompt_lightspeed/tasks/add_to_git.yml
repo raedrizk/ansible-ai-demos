@@ -1,0 +1,35 @@
+---
+- name: Checkout the repo
+  ansible.builtin.git:
+    repo: "{{ git_repo }}"
+    dest: "{{ git_dest }}"
+    version: "{{ git_branch }}"
+  register: git_checkout
+
+- name: Add the playbook to the repo
+  ansible.builtin.copy:
+    content: "{{ lightspeed_response }}"
+    dest: "{{ git_dest }}/{{ generated_playbook_name }}"
+  when: git_checkout.changed
+  register: copy_playbook
+
+- name: Add the playbook to git
+  ansible.builtin.command:
+    cmd: git add {{ generated_playbook_name }}
+    chdir: "{{ git_dest }}"
+  when: copy_playbook.changed
+  register: add_playbook
+
+- name: Commit the playbook to git
+  ansible.builtin.command:
+    cmd: git commit -m "Add playbook from AI"
+    chdir: "{{ git_dest }}"
+  when: add_playbook.changed
+  register: commit_playbook
+
+- name: Push the playbook to git
+  ansible.builtin.command:
+    cmd: git push
+    chdir: "{{ git_dest }}"
+  when: commit_playbook.changed
+  register: push_playbook

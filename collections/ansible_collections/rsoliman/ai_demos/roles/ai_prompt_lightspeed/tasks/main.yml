@@ -22,8 +22,9 @@
       lightspeed_response: "{{ response.json.playbook }}"
   when: response.status == 200
 
-# - name: write playbook to file
-#   ansible.builtin.copy:
-#     content: "{{ response.json.playbook }}"
-#     dest: /tmp/lightspeed_playbook_test.yml
-#   when: response.status == 200
+
+
+- name: Write the generated playbook to a file and add to git if needed
+  ansible.builtin.include_tasks: add_to_git.yml
+  when: add_to_scm
+
