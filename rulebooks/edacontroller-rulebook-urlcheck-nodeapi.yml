@@ -1,7 +1,7 @@
 ---
 - name: Check the health of Services API
   hosts: localhost
-  execution_strategy: sequential
+  execution_strategy: parallel
   sources:
     - name: check web server
       ansible.eda.url_check:
@@ -15,7 +15,7 @@
         - run_job_template:
             name: ServiceNowDemo_snow_create_Incident
             organization: "{{ job_templates_org_name | default('Foxhound') }}"
-            set_facts: true
+            post_events: true
             job_args:
               extra_vars:
                 snow_caller_choice: rsoliman
@@ -23,21 +23,23 @@
                 snow_inc_desc_choice: A routine check of the NodeJS Services API has failed.
                 snow_inc_urgency: high
                 snow_inc_impact: high
-        - debug:
-            var: fact.snow_incident_number
-        # - run_job_template:
-        #     name: AIDemo_slack_post_message
-        #     organization: "{{ job_templates_org_name | default('Foxhound') }}"
-        #     set_facts: true
-        #     job_args:
-        #       extra_vars:
-        #         slack_message: "!!! Services API is Down !!!1"
-        #         slack_message_color: "danger"
-        # - run_job_template:
-        #     name: AIDemo_slack_post_message
-        #     organization: "{{ job_templates_org_name | default('Foxhound') }}"
-        #     set_facts: true
-        #     job_args:
-        #       extra_vars:
-        #         slack_message: "!!! Services API is Down !!!2"
-        #         slack_message_color: "danger"
+        - run_job_template:
+            name: AIDemo_slack_post_message
+            organization: "{{ job_templates_org_name | default('Foxhound') }}"
+            set_facts: true
+            job_args:
+              extra_vars:
+                slack_message: "!!! Services API is Down !!!"
+                slack_message_color: "danger"
+
+    - name: Ticket created
+      condition: event.snow_incident_number is defined
+      action:
+        - run_job_template:
+            name: AIDemo_slack_post_message
+            organization: "{{ job_templates_org_name | default('Foxhound') }}"
+            set_facts: true
+            job_args:
+              extra_vars:
+                slack_message: "Incident {{ event.snow_incident_number }} has been created"
+                slack_message_color: "danger"
