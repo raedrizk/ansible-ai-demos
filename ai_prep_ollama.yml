@@ -1,0 +1,54 @@
+---
+- name: Prepare a RHEL Instance to run Ollama
+  hosts: foxhound-lab-ollama
+  vars:
+    #https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-nvidia-driver.html#public-nvidia-driver
+    #https://www.nvidia.com/en-us/drivers/details/242538/
+    epel_url: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm"
+    nvidia_driver_package_url: "https://us.download.nvidia.com/tesla/570.133.20/nvidia-driver-local-repo-rhel9-570.133.20-1.0-1.x86_64.rpm"
+    ollama_install_script_url: "https://ollama.com/install.sh"
+    ollama_model_name: "granite-3.3"
+    home_directory: "{{ input_home_directory | default('/home/ec2-user') }}"
+ 
+  tasks:
+  - name: Add epel
+    ansible.builtin.dnf:
+      name: "{{ epel_url }}"
+      state: present
+    become: true
+
+  - name: Download and install Nvidia Tesla T4 Repo RPM
+    ansible.builtin.dnf:
+      name: "{{ nvidia_driver_package_url }}"
+      state: present
+    become: true
+
+  - name: Install driver
+    ansible.builtin.dnf:
+      name: '@nvidia-driver:latest-dkms'
+      state: present
+    register: nvidia_driver_install_result
+    become: true
+
+  - name: Reboot post driver install
+    ansible.builtin.reboot:
+      msg: "Rebooting Post Nvidia Driver Install"
+    when: nvidia_driver_install_result.changed
+    become: true
+
+  - name: Install Ollama
+    ansible.builtin.command:
+      cmd: "curl -fsSL {{ ollama_install_script_url }} | sh"
+      args:
+        chdir: /home/ec2-user
+        warn: false
+      register: ollama_install
+      failed_when: 'NVIDIA GPU installed' not in ollama_install.stdout
+  
+  - name: Serve Ollama
+    ansible.builtin.command:
+      cmd: "nohup ollama serve &> ollama.log &"
+      args:
+        chdir: /home/ec2-user
+        warn: false
+      register: ollama_run

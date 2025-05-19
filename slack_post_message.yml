@@ -1,0 +1,12 @@
+---
+- name: Post a message to Slack
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Post a message to Slack
+      community.general.slack:
+        token: "{{ slack_token | default('the/slack/token') }}"
+        msg: "{{ slack_message | default('Ansible Rules!') }}"
+        color: "{{ slack_message_color | default('normal') }}"
+      register: slack_response
+

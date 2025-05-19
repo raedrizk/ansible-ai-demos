@@ -1,0 +1,30 @@
+---
+- name: Prompt the AI model
+  ansible.builtin.uri:
+    url: "{{ ai_host }}:{{ ai_port }}/{{ ai_endpoint }}"
+    method: POST
+    headers:
+      Content-Type: application/json
+      Authorization: "Bearer {{ ai_token }}"
+    body_format: json
+    body:
+      messages:
+        - "role": "user"
+          "content": "{{ ai_prompt }}"
+      model: "{{ ai_model }}"
+      max_tokens: 1000
+      temperature: 0.5
+    return_content: true
+    validate_certs: "{{ ai_validate_certs }}"
+  register: response
+
+- name: Print response
+  ansible.builtin.debug:
+    msg: "{{ response.json.choices[0].message.content }}"
+  when: response.status == 200
+
+- name: Set stats for following Jobs
+  ansible.builtin.set_stats:
+    data:
+      ai_response: "{{ response.json.choices[0].message.content }}"
+  when: response.status == 200

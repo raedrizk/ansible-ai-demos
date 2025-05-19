@@ -1,0 +1,21 @@
+namespace: rsoliman
+name: ai_demos
+version: 1.0.0
+readme: README.md
+authors:
+- Raed Soliman <raedrizk@gmail.com>
+
+description: A collection of roles used to demo AI automation and AI OPS using Ansible.
+
+license:
+- "MIT"
+
+tags: ['ai','demo','ansible','raedrizk','rsoliman']
+
+dependencies:
+    "redhat.ai": "*"
+    "ansible.builtin": "*"
+
+repository: http://example.com/repository
+homepage: http://example.com
+issues: http://example.com/issue/tracker

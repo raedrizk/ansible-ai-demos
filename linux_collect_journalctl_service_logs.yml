@@ -1,0 +1,36 @@
+---
+- name: Collect information from journalctl logs
+  hosts: all
+  gather_facts: false
+  become: true
+  become_method: sudo
+  vars:
+    service_name: "{{ input_service_name | default('node-api.service') }}"
+  tasks:
+    - name: Collect journalctl logs
+      ansible.builtin.shell: journalctl _SYSTEMD_INVOCATION_ID=`systemctl show -p InvocationID --value {{ service_name }}`
+      register: journalctl_service_logs
+      changed_when: false
+
+    - name: Display journalctl logs
+      ansible.builtin.debug:
+        var: journalctl_service_logs.stdout_lines
+
+    - name: Extract error lines from journalctl logs
+      ansible.builtin.set_fact:
+        error_line: "{{ item }}"
+      loop: "{{ journalctl_service_logs.stdout_lines }}"
+      when: item is search('Error')
+
+    - name: extract the package name from the error line
+      ansible.builtin.set_fact:
+        missing_package_name: "{{ error_line.split(' ')[-1] | regex_replace(\"'\", '') }}"
+      when: error_line is defined 
+
+    - name: Save journalctl logs to stats
+      ansible.builtin.set_stats:
+        data:
+          journalctl_logs: "{{ journalctl_service_logs.stdout }}"
+          journalctl_logs_lines: "{{ journalctl_service_logs.stdout_lines }}"
+          journalctl_logs_error_line: "{{ error_line }}"
+          journalctl_missing_package_name: "{{ missing_package_name | default('') }}"

@@ -1,0 +1,6 @@
+---
+- name: Prompt Lightspeed to generate a playbook.
+  hosts: localhost
+  gather_facts: false
+  roles:
+    - rsoliman.ai_demos.ai_prompt_lightspeed

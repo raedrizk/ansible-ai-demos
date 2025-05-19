@@ -1,0 +1,61 @@
+---
+- name: Prepare RHEL AI
+  hosts: rhelai
+  gather_facts: false
+  tasks:
+  - name: install necessary packages
+    ansible.builtin.dnf:
+      name:
+        - python3
+        - python3-pip
+        - git
+        - gcc
+        - g++ 
+        - make
+        - automake
+        - clang
+        - cmake
+        - libffi-devel
+        - python3-devel
+        - libstdc++-devel
+      state: present
+    become: true
+  - name: Install instructlab
+    ansible.builtin.pip:
+      name: instructlab
+      state: present
+    become: true
+
+  - name: upggrade python packages
+    ansible.builtin.pip:
+      name:
+        - pip
+        - setuptools
+        - wheel
+      state: latest
+    become: true
+
+  - name: Create initial InstructLab configuration.
+    redhat.ai.ilab_init:
+
+  - name: Download the {{ ilab_model_name }} model
+    redhat.ai.ilab_model_download:
+      name: "{{ ilab_model_name | default('granite-3.3') }}"
+      release: latest
+      registry_username: "{{ registry_username }}"
+      registry_password: "{{ registry_password }}"
+      
+  - name: Configure InstructLab
+    redhat.ai.ilab_config:
+      host_port: "0.0.0.0:{{ instructlab_port | default('5000') }}"
+      backend: "llama-cpp"
+      token: "{{ instructlab_token | default('supersecrettoken') }}"
+      model_path: "{{ model_directory | default ('/ec2-user/models')}}/{{ model_file_name | default ('granite-3.3-8b-instruct-Q3_K_L.gguf') }}"
+
+  # - name: Ask model a question
+  #   redhat.ai.completion:
+  #     base_url: "http://127.0.0.1:{{ instructlab_port | default('5000') }}"
+  #     token: "{{ instructlab_token | default('supersecrettoken') }}"
+  #     prompt: "What is the meaning of life?"
+  #     model_path: "{{ model_directory | default ('/ec2-user/models')}}/{{ model_file_name | default ('granite-3.3-8b-instruct-Q3_K_L.gguf') }}"
+  #     validate_certs: false
