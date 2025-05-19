@@ -42,5 +42,3 @@
               extra_vars:
                 slack_message: "!!! Services API is Down !!!"
                 slack_message_color: "danger"
-
-
