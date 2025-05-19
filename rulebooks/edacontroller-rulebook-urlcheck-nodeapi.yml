@@ -9,6 +9,18 @@
           - "{{ api_url }}"
         delay: "{{ url_check_delay | default(30) }}"
   rules:
+    - name: Ticket created
+      condition: event.snow_incident_number is defined
+      action:
+        - run_job_template:
+            name: AIDemo_slack_post_message
+            organization: "{{ job_templates_org_name | default('Foxhound') }}"
+            set_facts: true
+            job_args:
+              extra_vars:
+                slack_message: "Incident {{ event.snow_incident_number }} has been created"
+                slack_message_color: "danger"
+
     - name: Service down
       condition: event.url_check.status == 'down'
       actions:
@@ -32,14 +44,4 @@
                 slack_message: "!!! Services API is Down !!!"
                 slack_message_color: "danger"
 
-    - name: Ticket created
-      condition: event.snow_incident_number is defined
-      action:
-        - run_job_template:
-            name: AIDemo_slack_post_message
-            organization: "{{ job_templates_org_name | default('Foxhound') }}"
-            set_facts: true
-            job_args:
-              extra_vars:
-                slack_message: "Incident {{ event.snow_incident_number }} has been created"
-                slack_message_color: "danger"
+
