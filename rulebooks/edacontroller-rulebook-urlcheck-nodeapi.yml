@@ -13,7 +13,7 @@
       condition: event.url_check.status == 'down'
       actions:
         - run_job_template:
-            name: ServiceNowDemo_snow_create_incident
+            name: ServiceNowDemo_snow_create_Incident
             organization: "{{ job_templates_org_name | default('Foxhound') }}"
             set_facts: true
             job_args:
