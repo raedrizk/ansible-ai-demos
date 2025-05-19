@@ -6,7 +6,8 @@
       git config --global user.email "{{ git_email }}"
       git config --global credential.helper store
       echo "https://{{ git_username }}:{{ git_token }}@github.com" > ~/.git-credentials
-      
+  no_log: true
+
 - name: Checkout the repo
   ansible.builtin.git:
     repo: "{{ git_repo }}"
@@ -41,3 +42,11 @@
     chdir: "{{ git_dest }}"
   when: commit_playbook.changed
   register: push_playbook
+
+- name: Set stats for following Jobs
+  ansible.builtin.set_stats:
+    data:
+      generated_playbook_name: "{{ generated_playbook_name }}"
+      git_repo: "{{ git_repo }}"
+      git_branch: "{{ git_branch }}"
+
