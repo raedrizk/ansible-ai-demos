@@ -2,7 +2,7 @@
 - name: Create and Launch a Job template for an I generated playbook
   hosts: all
   gather_facts: false
-  task:
+  tasks:
   - name: Add project
     ansible.controller.project:
       name: "AI Generated Playbooks"
