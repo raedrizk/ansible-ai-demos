@@ -1,12 +1,11 @@
 ---
 - name: Listen for ServiceNow events sent from the Event-Driven Ansible Notification Service
   hosts: localhost
-  ## Listening on localhost port 5033.
+  ## Listening on localhost port 5000.
   sources:
     - ansible.eda.webhook:
         host: 0.0.0.0
-        token: "{{ webhook_token }}"
-        port: 5001
+        port: 5000
   rules:
     - name: SNOW Condition - API Down
       condition: event.payload is defined and event.payload.short_description contains "NodeJS API Down"
