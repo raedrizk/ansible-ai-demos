@@ -24,7 +24,7 @@
                 snow_inc_urgency: high
                 snow_inc_impact: high
         - debug:
-            var: facts.snow_incident_number
+            var: fact.snow_incident_number
         # - run_job_template:
         #     name: AIDemo_slack_post_message
         #     organization: "{{ job_templates_org_name | default('Foxhound') }}"
