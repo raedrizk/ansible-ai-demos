@@ -24,6 +24,7 @@
       query:
         - short_description: = Services API is Down
         - state: = new
+        - caller: = ansible
     register: snow_incidents
   
   - name: deby
