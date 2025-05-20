@@ -49,4 +49,3 @@
       generated_playbook_name: "{{ generated_playbook_name }}"
       git_repo: "{{ git_repo }}"
       git_branch: "{{ git_branch }}"
-
