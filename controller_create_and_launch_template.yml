@@ -7,6 +7,9 @@
     GATEWAY_PASSWORD: "{{ lookup('ansible.builtin.env', 'CONTROLLER_PASSWORD') }}"
     GATEWAY_HOSTNAME: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}"
     GATEWAY_VERIFY_SSL: "{{ lookup('ansible.builtin.env', 'CONTROLLER_VERIFY_SSL') }}"
+    SN_HOST: "https://{{ snow_instance }}.service-now.com"
+    SN_USERNAME: "{{ snow_username }}"
+    SN_PASSWORD: "{{ snow_password }}"
   pre_tasks:
     - name: Authenticate with platform gateway
       ansible.platform.token:
