@@ -3,10 +3,6 @@
   hosts: all
   gather_facts: false
   environment:
-  #   CONTROLLER_USERNAME: "{{ controller_username }}"
-  #   CONTROLLER_PASSWORD: "{{ controller_password }}"
-  #   CONTROLLER_HOST: "{{ controller_hostname }}"
-  #   CONTROLLER_VERIFY_SSL: "{{ controller_verify_ssl }}"
     GATEWAY_USERNAME: "{{ lookup('ansible.builtin.env', 'CONTROLLER_USERNAME') }}"
     GATEWAY_PASSWORD: "{{ lookup('ansible.builtin.env', 'CONTROLLER_PASSWORD') }}"
     GATEWAY_HOSTNAME: "{{ lookup('ansible.builtin.env', 'CONTROLLER_HOST') }}"
