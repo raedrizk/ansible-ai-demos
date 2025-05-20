@@ -3,7 +3,7 @@ ai_host: "{{ input_ai_host | default('https://c.ai.ansible.redhat.com') }}"
 ai_port: "{{ input_ai_port | default(443) }}"
 ai_endpoint: "{{ input_ai_endpoint | default('api/v1/ai/generations/playbook/') }}"
 ai_token: "{{ input_ai_token | default('mysupersecrettoken') }}"
-ai_prompt: "{{ input_ai_prompt | default('install and start httpd on all hosts in the web group, all of which are running RHEL8') }}"
+ai_prompt: "{{ input_ai_prompt | default('install and start httpd on all hosts in the web group, all of which are running RHEL8') }} {{ journalctl_missing_package_name if journalctl_missing_package_name is defined else '' }}"
 
 add_to_scm: "{{ input_add_to_scm | default(true) }}"
 git_repo: "{{ input_git_repo | default('https://github.com/raedrizk/ansible_ai_generated_playbooks.git') }}"

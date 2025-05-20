@@ -7,5 +7,4 @@ ai_token: "{{ input_ai_token | default('mysupersecrettoken') }}"
 ai_model: "{{ input_ai_model | default('granite3.3:latest') }}"
 ai_max_tokens: "{{ input_ai_max_tokens | default(500) }}"
 ai_temperature: "{{ input_ai_temperature | default(0.7) }}"
-ai_prompt: "{{ input_ai_prompt | default('Who is the protagonist in Metal Gear Solid 3: Snake Eater?') }}"
-
+ai_prompt: "{{ input_ai_prompt | default('Who is the protagonist in Metal Gear Solid 3: Snake Eater?') }} {{ journalctl_logs_error_line if journalctl_logs_error_line is defined else '' }}"
