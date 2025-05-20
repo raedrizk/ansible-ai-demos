@@ -32,5 +32,5 @@
         data:
           journalctl_logs: "{{ journalctl_service_logs.stdout }}"
           journalctl_logs_lines: "{{ journalctl_service_logs.stdout_lines }}"
-          journalctl_logs_error_line: "{{ error_line }}"
+          journalctl_logs_error_line: "{{ error_line | default('') }}"
           journalctl_missing_package_name: "{{ missing_package_name | default('') }}"

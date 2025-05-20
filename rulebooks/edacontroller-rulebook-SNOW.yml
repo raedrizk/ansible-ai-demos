@@ -7,11 +7,11 @@
         host: 0.0.0.0
         port: 5000
   rules:
-    - name: SNOW Condition - API Down
-      condition: event.payload is defined and event.payload.short_description contains "NodeJS API Down"
+    - name: NEW SNOW Incident - API Down
+      condition: event.payload is defined and event.payload.short_description contains "Services API is Down"
       action:
         run_workflow_template:
-          name: WF_EDADemo_action_start_srevice_and_close_incident
+          name: WF_AIDemo_Enhance_Incident_and_Notify_slack
           organization: "{{ job_templates_org_name | default('Foxhound') }}"
           job_args:
             extra_vars:
