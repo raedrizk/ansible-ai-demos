@@ -10,6 +10,11 @@
   rules:
     - name: Service down
       condition: event.url_check.status == 'down'
+      throttle:
+        once_within: 10 minutes
+        group_by_attributes:
+          - event.url_check.url
+          - event.url_check.status
       actions:
         - run_job_template:
             name: ServiceNowDemo_snow_create_Incident
