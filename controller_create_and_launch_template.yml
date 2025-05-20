@@ -32,7 +32,7 @@
 
   - name: Create job template from the generated playbook
     ansible.controller.job_template:
-      name: "AI Generated Playbook"
+      name: "BOT_AI_Generated_Playbook"
       job_type: "run"
       organization: "{{ input_organization | default('Foxhound') }}"
       inventory: "{{ input_inventory | default('Foxhound Inventory') }}"
@@ -44,5 +44,68 @@
         - "{{ input_credential | default('foxhound-lab-admin') }}"
       state: present
 
+  # - name: Launch a job
+  #   ansible.controller.job_launch:
+  #     organization: "{{ input_organization | default('Foxhound') }}"
+  #     name: "AI Generated Playbook"
+  #     wait: true
+  #   register: ai_job_result
 
-
+  - name: Create a workflow job template with workflow nodes in template
+    ansible.controller.workflow_job_template:
+      name: WF_AIDemo_apply_ai_generated_playbook
+      description: "Workflow job template to apply AI generated playbook"
+      organization: "{{ input_organization | default('Foxhound') }}"
+      workflow_nodes:
+        - identifier: snow_update_fail
+          all_parents_must_converge: false
+          unified_job_template:
+            organization:
+              name: "{{ input_organization | default('Foxhound') }}"
+            name: ServiceNowDemo_snow_update_Incident
+            type: job_template
+            extra_data:
+              snow_update_comments: "Running AI generated playbook Failed"
+        - identifier: slack_update_fail
+          all_parents_must_converge: false
+          unified_job_template:
+            organization:
+              name: "{{ input_organization | default('Foxhound') }}"
+            name: AIDemo_slack_post_message
+            type: job_template
+            extra_data:
+              slack_message: "Running AI generated playbook Failed"
+              slack_message_color: "danger"
+        - identifier: snow_update_success
+          all_parents_must_converge: false
+          unified_job_template:
+            organization:
+              name: "{{ input_organization | default('Foxhound') }}"
+            name: ServiceNowDemo_snow_update_Incident
+            type: job_template
+            extra_data:
+              snow_update_comments: "Running AI generated playbook Success"
+        - identifier: slack_update_success
+          all_parents_must_converge: false
+          unified_job_template:
+            organization:
+              name: "{{ input_organization | default('Foxhound') }}"
+            name: AIDemo_slack_post_message
+            type: job_template
+            extra_data:
+              slack_message: "Running AI generated playbook Success"
+              slack_message_color: "good"
+        - identifier: run_ai_generated_playbook
+          all_parents_must_converge: false
+          unified_job_template:
+            organization:
+              name: "{{ input_organization | default('Foxhound') }}"
+            name: "BOT_AI_Generated_Playbook
+            type: job_template"
+          related:
+            success_nodes:
+              - identifier: snow_update_success
+              - identifier: slack_update_success
+            failure_nodes:
+              - identifier: snow_update_fail
+              - identifier: slack_update_fail
