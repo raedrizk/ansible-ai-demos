@@ -25,8 +25,9 @@
 - name: Set fact for following tasks
   ansible.builtin.set_fact:
     lightspeed_response: "{{ response.json.playbook }}"
-    #Data for ServiceNow
+    #Data for ServiceNow and Slack
     snow_update_comments: "AI Generated Remediation Playbook:\n{{ response.json.playbook }}"
+    slack_message: "AI Generated Remediation Playbook:\n{{ response.json.playbook }}"
   when: response.status == 200
 
 - name: Write the generated playbook to a file and add to git if needed

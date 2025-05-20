@@ -34,6 +34,7 @@
           journalctl_logs_lines: "{{ journalctl_service_logs.stdout_lines }}"
           journalctl_logs_error_line: "{{ error_line | default('') }}"
           journalctl_missing_package_name: "{{ missing_package_name | default('') }}"
-          # Data for ServiceNow
+          # Data for ServiceNow and Slack
           snow_update_comments: "{{ journalctl_service_logs.stdout }}"
+          slack_message: "!!! Journalctl logs for {{ service_name }} !!!\n{{ journalctl_service_logs.stdout }}"
       

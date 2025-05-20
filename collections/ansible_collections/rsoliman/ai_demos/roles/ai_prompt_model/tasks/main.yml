@@ -27,6 +27,7 @@
   ansible.builtin.set_stats:
     data:
       ai_response: "{{ response.json.choices[0].message.content }}"
-      # Data for ServiceNow
+      # Data for ServiceNow and Slack
       snow_update_comments: "{{ response.json.choices[0].message.content }}"
+      slack_message: "{{ response.json.choices[0].message.content }}"
   when: response.status == 200
