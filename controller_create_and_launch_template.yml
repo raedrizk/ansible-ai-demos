@@ -30,9 +30,19 @@
         - caller: = ansible
     register: snow_incidents
   
-  - name: deby
+  - name: set the fact for the incident number
+    ansible.builtin.set_fact:
+      incident_number: "{{ snow_incidents.records | sort(attribute='number') | last }}"
+
+
+  - name: incident
     debug:
-      var: snow_incidents
+      var: incident_number
+      
+  
+  - name: number
+    debug:
+      var: incident_number.number
 
 
 
