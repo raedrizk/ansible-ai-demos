@@ -61,7 +61,7 @@
 
   - name: Create a workflow job template with workflow nodes in template
     ansible.controller.workflow_job_template:
-      name: WF_AIDemo_apply_ai_generated_playbook
+      name: WF_AIDemo_run_ai_generated_playbook
       description: "Workflow job template to apply AI generated playbook"
       organization: "{{ input_organization | default('Foxhound') }}"
       extra_vars:  
@@ -70,7 +70,7 @@
   - name: Create WorkFlow job template nodes
     ansible.controller.workflow_job_template_node:
       identifier: snow_update_fail
-      workflow: WF_AIDemo_apply_ai_generated_playbook
+      workflow: WF_AIDemo_run_ai_generated_playbook
       unified_job_template: ServiceNowDemo_snow_update_Incident
       organization: "{{ input_organization | default('Foxhound') }}"
       extra_data:
@@ -79,7 +79,7 @@
   - name: Create WorkFlow job template nodes
     ansible.controller.workflow_job_template_node:
       identifier: snow_update_success
-      workflow: WF_AIDemo_apply_ai_generated_playbook
+      workflow: WF_AIDemo_run_ai_generated_playbook
       unified_job_template: ServiceNowDemo_snow_update_Incident
       organization: "{{ input_organization | default('Foxhound') }}"
       extra_data:
@@ -88,7 +88,7 @@
   - name: Create WorkFlow job template nodes
     ansible.controller.workflow_job_template_node:
       identifier: slack_update_fail
-      workflow: WF_AIDemo_apply_ai_generated_playbook
+      workflow: WF_AIDemo_run_ai_generated_playbook
       unified_job_template: AIDemo_slack_post_message
       organization: "{{ input_organization | default('Foxhound') }}"
       extra_data:
@@ -97,7 +97,7 @@
   - name: Create WorkFlow job template nodes
     ansible.controller.workflow_job_template_node:
       identifier: slack_update_success
-      workflow: WF_AIDemo_apply_ai_generated_playbook
+      workflow: WF_AIDemo_run_ai_generated_playbook
       unified_job_template: AIDemo_slack_post_message
       organization: "{{ input_organization | default('Foxhound') }}"
       extra_data:
@@ -107,7 +107,7 @@
   - name: Create parent node for prior nodes
     ansible.controller.workflow_job_template_node:
       identifier: run_ai_generated_playbook
-      workflow: WF_AIDemo_apply_ai_generated_playbook
+      workflow: WF_AIDemo_run_ai_generated_playbook
       unified_job_template: BOT_AI_Generated_Playbook
       organization: "{{ input_organization | default('Foxhound') }}"
       success_nodes:
