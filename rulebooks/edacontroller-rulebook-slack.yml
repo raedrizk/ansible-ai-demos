@@ -24,6 +24,3 @@
         - run_job_template:
             name: AIDemo_feed_the_robots
             organization: "{{ job_templates_org_name | default('Foxhound') }}"
-            job_args:
-              extra_vars:
-                count: "{{ event.payload.text }}"
