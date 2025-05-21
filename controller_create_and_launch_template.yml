@@ -67,6 +67,77 @@
       extra_vars:  
         snow_incident_number: "{{ snow_incident.number }}"
         
+
+
+  - name: Create WorkFlow job template nodes
+    ansible.controller.workflow_job_template_node:
+      identifier: snow_close_incident
+      workflow: WF_AIDemo_run_ai_generated_playbook
+      unified_job_template: ServiceNowDemo_snow_close_Incident
+      organization: "{{ input_organization | default('Foxhound') }}"
+      extra_data:
+        Close notes: "Issue Resolved by Ansible"
+
+
+  - name: Create WorkFlow job template nodes
+    ansible.controller.workflow_job_template_node:
+      identifier: snow_update_fail2
+      workflow: WF_AIDemo_run_ai_generated_playbook
+      unified_job_template: ServiceNowDemo_snow_update_Incident
+      organization: "{{ input_organization | default('Foxhound') }}"
+      extra_data:
+        snow_update_comments: "Validating service endpoint Failed"   
+  
+  - name: Create WorkFlow job template nodes
+    ansible.controller.workflow_job_template_node:
+      identifier: snow_update_success2
+      workflow: WF_AIDemo_run_ai_generated_playbook
+      unified_job_template: ServiceNowDemo_snow_update_Incident
+      organization: "{{ input_organization | default('Foxhound') }}"
+      extra_data:
+        snow_update_comments: "Validating service endpoint Succeseeded"
+      success_nodes:
+        - snow_close_incident   
+  
+  - name: Create WorkFlow job template nodes
+    ansible.controller.workflow_job_template_node:
+      identifier: slack_update_fail2
+      workflow: WF_AIDemo_run_ai_generated_playbook
+      unified_job_template: AIDemo_slack_post_message
+      organization: "{{ input_organization | default('Foxhound') }}"
+      extra_data:
+        slack_message: "Validating service endpoint Failed"
+        slack_message_color: "danger"
+  - name: Create WorkFlow job template nodes
+    ansible.controller.workflow_job_template_node:
+      identifier: slack_update_success2
+      workflow: WF_AIDemo_run_ai_generated_playbook
+      unified_job_template: AIDemo_slack_post_message
+      organization: "{{ input_organization | default('Foxhound') }}"
+      extra_data:
+        slack_message: "Validating service endpoint Succeseeded"
+        slack_message_color: "good"
+
+  - name: Create parent node for prior nodes
+    ansible.controller.workflow_job_template_node:
+      identifier: validate_service_endpoint
+      workflow: WF_AIDemo_run_ai_generated_playbook
+      unified_job_template: LinuxDemo_linux_validate_local_endpoint
+      organization: "{{ input_organization | default('Foxhound') }}"
+      success_nodes:
+        - slack_update_success2
+        - snow_update_success2
+      failure_nodes:
+        - slack_update_fail2
+        - snow_update_fail2
+
+
+
+
+
+
+
+
   - name: Create WorkFlow job template nodes
     ansible.controller.workflow_job_template_node:
       identifier: snow_update_fail
@@ -83,7 +154,9 @@
       unified_job_template: ServiceNowDemo_snow_update_Incident
       organization: "{{ input_organization | default('Foxhound') }}"
       extra_data:
-        snow_update_comments: "Running AI generated playbook Succeseeded"   
+        snow_update_comments: "Running AI generated playbook Succeseeded"  
+      always_nodes:
+        - validate_service_endpoint 
   
   - name: Create WorkFlow job template nodes
     ansible.controller.workflow_job_template_node:
@@ -101,8 +174,10 @@
       unified_job_template: AIDemo_slack_post_message
       organization: "{{ input_organization | default('Foxhound') }}"
       extra_data:
-        slack_message: "Running AI generated playbook Success"
+        slack_message: "Running AI generated playbook Succeseeded"
         slack_message_color: "good"
+      always_nodes:
+        - validate_service_endpoint 
         
   - name: Create parent node for prior nodes
     ansible.controller.workflow_job_template_node:
@@ -116,4 +191,3 @@
       failure_nodes:
         - slack_update_fail
         - snow_update_fail
-         
