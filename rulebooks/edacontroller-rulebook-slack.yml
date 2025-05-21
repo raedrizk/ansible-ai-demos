@@ -1,0 +1,29 @@
+---
+- name: Take actions when a slack slash command is received
+  hosts: localhost
+  sources:
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
+  rules:
+    - name: Build q workflow and Apply fix
+      condition: event.payload.command == "/apply-fix"
+      actions:
+        - run_job_template:
+            name: AIDemo_create_workflow_for_ai_generated_playbook
+            organization: "{{ job_templates_org_name | default('Foxhound') }}"
+        - run_workflow_template:
+            name: WF_AIDemo_run_ai_generated_playbook
+            organization: "{{ job_templates_org_name | default('Foxhound') }}"
+            job_args:
+              limit: "{{ event.payload.text }}"
+
+    - name: Feed the robots
+      condition: event.payload.command == "/feed-the-robots"
+      actions:
+        - run_job_template:
+            name: AIDemo_feed_the_robots
+            organization: "{{ job_templates_org_name | default('Foxhound') }}"
+            job_args:
+              extra_vars:
+                count: "{{ event.payload.number }}"

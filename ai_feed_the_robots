@@ -1,0 +1,17 @@
+---
+- name: Feed the robots to ensure they are ready to work
+  hosts: all
+  gather_facts: false
+  vars:
+    # The number of minutes to wait before the robots are fed
+    feed_time: "{{ count | default(5) }}"
+  tasks:
+  - name: Feed the robots at the rate of 1 "battery" per second
+    ansible.builtin.pause:
+      seconds: "{{ feed_time }}"
+    when: feed_time > 0
+  
+  - name: Notify the robots that they are fed
+    ansible.builtin.debug:
+      msg: "The robots have been fed and are ready to work!"
+    when: feed_time > 0
