@@ -39,5 +39,5 @@
     data:
       lightspeed_response: "{{ response.json.playbook }}"
       # Data for ServiceNow and Slack
-      snow_update_comments: "AI Generated Remediation Playbook:\n{{ response.json.playbook | to_nice_json }}"
-      slack_message: "AI Generated Remediation Playbook:\n{{ response.json.playbook | to_nice_json}}"
+      snow_update_comments: "{{ response.json.playbook }}"
+      slack_message: "{{ response.json.playbook }}"
