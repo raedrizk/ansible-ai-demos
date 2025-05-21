@@ -64,6 +64,7 @@
       name: WF_AIDemo_run_ai_generated_playbook
       description: "Workflow job template to apply AI generated playbook"
       organization: "{{ input_organization | default('Foxhound') }}"
+      ask_variables_on_launch: true
       extra_vars:  
         snow_incident_number: "{{ snow_incident.number }}"
 
