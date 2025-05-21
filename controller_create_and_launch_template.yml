@@ -24,10 +24,7 @@
   tasks:
   - name: Retrieve all incidents that contain SAP in its short description by using field query
     servicenow.itsm.incident_info:
-      query:
-        - short_description: = Services API is Down
-        - state: = new
-        - caller: = ansible
+      sysparm_query: "descriptionLIKENodeJS^state=new^sys_created_by=ansible"
     register: snow_incidents
   
   - name: set the fact for the incident number
