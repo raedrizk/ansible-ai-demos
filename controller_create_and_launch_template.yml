@@ -54,7 +54,7 @@
       limit: "{{ input_limit | default('api.foxhound.unit') }}"
       project: "AI Generated Playbooks"
       playbook: "{{ generated_playbook_name | default('generated_playbook.yml') }}"
-      become_enabled: true
+      execution_environment: "{{ input_execution_environment | default('foxhound-complete-ee') }}"
       credentials:
         - "{{ input_credential | default('foxhound-lab-admin') }}"
       state: present
