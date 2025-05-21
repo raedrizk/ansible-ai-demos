@@ -26,4 +26,4 @@
             organization: "{{ job_templates_org_name | default('Foxhound') }}"
             job_args:
               extra_vars:
-                count: "{{ event.payload.number }}"
+                count: "{{ event.payload.text }}"
