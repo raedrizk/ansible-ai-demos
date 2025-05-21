@@ -22,11 +22,12 @@
       ansible.builtin.set_fact:
         controller_oauthtoken: “{{ r_authtoken.ansible_facts.aap_token.token }}”
   tasks:
+
   - name: Retrieve all incidents that contain SAP in its short description by using field query
     servicenow.itsm.incident_info:
-      sysparm_query: "descriptionLIKENodeJS^state=new^sys_created_by=ansible"
+      sysparm_query: short_description=Services API is Down^active=true^Caller=ansible
     register: snow_incidents
-  
+
   - name: set the fact for the incident number
     ansible.builtin.set_fact:
       snow_incident: "{{ snow_incidents.records | sort(attribute='number') | last }}"
