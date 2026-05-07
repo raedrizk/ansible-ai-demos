@@ -8,7 +8,10 @@
         interval: 5
   rules:
     - name: NEW SNOW Incident - API Down
-      condition: event.payload is defined and event.payload.short_description contains "Services API is Down"
+      # condition: event.payload is defined and event.payload.short_description contains "Services API is Down"
+      condition: event.reassignment_count == '0' and  event.reopen_count == '0'
+                 and event.sysmod_count == '0' and event.state == '1'
+                 and event.short_description is defined and event.short_description contains "Services API is Down"
       action:
         run_workflow_template:
           name: WF_AIDemo_Enhance_Incident_and_Notify_slack
