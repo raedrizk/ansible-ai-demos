@@ -1,11 +1,11 @@
 ---
 - name: Listen for ServiceNow events sent from the Event-Driven Ansible Notification Service
   hosts: localhost
+  ## Listening on localhost port 5000.
   sources:
-    - name: Watch for new incidents
-      servicenow.itsm.records:
-        table: incident
-        interval: 5
+    - ansible.eda.webhook:
+        host: 0.0.0.0
+        port: 5000
   rules:
     - name: NEW SNOW Incident - API Down
       condition: event.payload is defined and event.payload.short_description contains "Services API is Down"
@@ -16,9 +16,3 @@
           job_args:
             extra_vars:
               snow_incident_number: "{{ event.payload.number }}"
-
-    - name: Catch all other events
-      condition: event.sys_id is defined
-      action:
-        print_event:
-          pretty: true
