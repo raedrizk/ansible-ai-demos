@@ -18,7 +18,7 @@
           organization: "{{ job_templates_org_name | default('Foxhound') }}"
           job_args:
             extra_vars:
-              snow_incident_number: "{{ event.payload.number }}"
+              snow_incident_number: "{{ event.number }}"
 
     - name: Catch all other events
       condition: event.sys_id is defined
