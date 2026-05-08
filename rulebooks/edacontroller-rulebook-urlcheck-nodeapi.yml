@@ -3,10 +3,12 @@
   hosts: localhost
   sources:
     - name: check web server
-      ansible.eda.url_check:
+      # ansible.eda.url_check:
+      community.eda.url_check:
         urls:
           - "{{ api_url }}"
         delay: "{{ url_check_delay | default(60) }}"
+        verify_ssl: false
   rules:
     - name: Service down
       condition: event.url_check.status == 'down'
