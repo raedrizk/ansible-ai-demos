@@ -3,8 +3,8 @@
   hosts: localhost
   sources:
     - name: check web server
-      # ansible.eda.url_check:
-      community.eda.url_check:
+      ansible.eda.url_check:
+      # community.eda.url_check: #Switch to Community collection when New DE is Built
         urls:
           - "{{ api_url }}"
         delay: "{{ url_check_delay | default(60) }}"
