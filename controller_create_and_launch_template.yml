@@ -23,7 +23,7 @@
         controller_oauthtoken: “{{ r_authtoken.ansible_facts.aap_token.token }}”
   tasks:
 
-  - name: Retrieve all incidents that contain SAP in its short description by using field query
+  - name: Retrieve all incidents that contain API is Down in its short description by using field query
     servicenow.itsm.incident_info:
       sysparm_query: short_description=Services API is Down^active=true^Caller=ansible
     register: snow_incidents
@@ -121,12 +121,18 @@
       workflow: WF_AIDemo_run_ai_generated_playbook
       unified_job_template: LinuxDemo_linux_validate_local_endpoint
       organization: "{{ input_organization | default('Foxhound') }}"
+      limit : "api.foxhound.unit"
       success_nodes:
         - slack_update_success2
         - snow_update_success2
       failure_nodes:
         - slack_update_fail2
         - snow_update_fail2
+      extra_data:
+        protocol: 'https'
+        endpoint_port: '443'
+        endpoint: 'api/status'
+        validate_certs: 'false'
 
   - name: Create WorkFlow job template nodes
     ansible.controller.workflow_job_template_node:

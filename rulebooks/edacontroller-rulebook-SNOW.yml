@@ -17,8 +17,10 @@
           name: WF_AIDemo_Enhance_Incident_and_Notify_slack
           organization: "{{ job_templates_org_name | default('Foxhound') }}"
           job_args:
+            limit: 'services.foxhound.unit'
             extra_vars:
               snow_incident_number: "{{ event.number }}"
+              input_service_name: 'node-api.service'
 
     - name: Catch all other events
       condition: event.sys_id is defined
