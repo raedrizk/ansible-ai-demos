@@ -10,17 +10,17 @@
     SN_HOST: "https://{{ snow_instance }}.service-now.com"
     SN_USERNAME: "{{ snow_username }}"
     SN_PASSWORD: "{{ snow_password }}"
-  pre_tasks:
-    - name: Authenticate with platform gateway
-      ansible.platform.token:
-        description: Create token
-        scope: write
-        state: present
-      register: r_authtoken
+  # pre_tasks:
+  #   - name: Authenticate with platform gateway
+  #     ansible.platform.token:
+  #       description: Create token
+  #       scope: write
+  #       state: present
+  #     register: r_authtoken
 
-    - name: Set fact for token
-      ansible.builtin.set_fact:
-        controller_oauthtoken: “{{ r_authtoken.ansible_facts.aap_token.token }}”
+  #   - name: Set fact for token
+  #     ansible.builtin.set_fact:
+  #       controller_oauthtoken: “{{ r_authtoken.ansible_facts.aap_token.token }}”
   tasks:
 
   - name: Retrieve all incidents that contain API is Down in its short description by using field query
